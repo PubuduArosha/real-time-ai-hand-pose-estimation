@@ -1,13 +1,20 @@
 import React, {useRef} from 'react';
-import * as tf from "@tensorflow-models/handpose";
-import *as handpose from "@tensorflow-models/handpose";
-import Webcam from 'react-webcam';
+import * as tf from "@tensorflow/tfjs";
+import * as handpose from "@tensorflow-models/handpose";
+import Webcam from "react-webcam";
 
 import './App.css';
 
 function App() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+
+  const runHandpose = async () => {
+    const net = await handpose.load();
+    console.log("Handpose model loaded.");
+  };
+
+  runHandpose();
 
   return (
     <div className="App">
