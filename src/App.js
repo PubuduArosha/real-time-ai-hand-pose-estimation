@@ -12,6 +12,38 @@ function App() {
   const runHandpose = async () => {
     const net = await handpose.load();
     console.log("Handpose model loaded.");
+    //loop and detect hands
+    setInterval( () => {
+      detect(net)
+    }, 100)
+  };
+
+  const detect = async (net) => {
+    //check data is available
+    if(
+      typeof webcamRef.current !== "undefined" && 
+      webcamRef.current !== null &&
+      webcamRef.current.video.readyState === 4
+    ){
+      //get video properties 
+      const video = webcamRef.current.video;
+      const videoWidth = webcamRef.current.video.videoWidth;
+      const videoHeight = webcamRef.current.video.videoHeight;
+
+      //set video height and width
+      webcamRef.current.video.width = videoWidth;
+      webcamRef.current.video.height = videoHeight;
+
+      //set canvas height and width
+      canvasRef.current.width = videoWidth;
+      canvasRef.current.height = videoHeight;
+
+      //make detections
+      const hand = await net.estimateHands(video);
+      console.log(hand);
+
+      //draw mesh
+    }
   };
 
   runHandpose();
